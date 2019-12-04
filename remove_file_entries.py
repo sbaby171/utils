@@ -1,4 +1,6 @@
-import os, pwd, re, shutil 
+import os, pwd, re, shutil, getpass
+
+
 
 def remove(base_path, regex, dirs=True, files=True, users=False, debug=False):
     """ 
@@ -45,7 +47,7 @@ def remove(base_path, regex, dirs=True, files=True, users=False, debug=False):
         full_path = os.path.join(base_path,file) 
         user_name = pwd.getpwuid(os.stat(full_path).st_uid).pw_name
         # Compare file against regex 
-        if re.search(regex,file):
+        if re.match(regex,file):
             remove_flag = False
             if debug: print("DEBUG: (%s): Entry match: %s"%(func, full_path))
             if debug: print("DEBUG: (%s):   username : %s"%(func,user_name))
@@ -70,6 +72,6 @@ if __name__ == "__main__":
 
     removed_files = remove(base_path = path, 
                            regex  = "test*",
-                           users = ["Max.Sbabo"],
+                           users = [getpass.getuser()],
                            debug = debug,)
     print(removed_files)
